@@ -1,3 +1,3 @@
 # remind-you-what-to-do
-This is discord bot reminder
-still WIP
+This is a discord bot reminder
+still in WIP
