@@ -1,8 +1,8 @@
 """TEST Reminder bot"""
 
 import discord
-from discord.ext import commands
 import asyncio
+from discord.ext import commands
 
 #เอาไว้สำหรับรอรับคำสั่ง
 bot = commands.Bot(command_prefix="!", intents=discord.Intents.all())
@@ -33,31 +33,47 @@ def main():
         """test"""
         await ctx.send("arai ja!")
 
-    #ลอง Basic Reminds - 66070105
-    @bot.command(name='timer', help='Create a timer.', usage='<time> [s|m|h] (<message>)')
-    async def timer(ctx, time, unit, *message):
-        if not message:
-            message = 'Time\'s up!'
-        else:
-            message = ' '.join(message)
+    @bot.command()
+    async def test2(ctx):
+        """test2"""
+        await ctx.send(embed=discord.Embed(color=discord.Color.red(), description=f"Embed Test"))
 
-        time = int(time)
-        oldtime = time # time without unit calculation to seconds
-        if unit == 's':
-            pass
-        elif unit == 'm':
-            time *= 60
-        elif unit == 'h':
-            time *= 3600
-        else:
-            await ctx.send(':x: **ERROR**: Invalid unit.\nUnit can be \'s\' for seconds, \'m\' for minutes or \'h\' for hours.')
+    #ลอง Basic Reminds - 66070105
+    @bot.command()
+    async def knock(ctx, time, *task):
+
+        task = ' '.join(task)
+
+        def convert(time):
+            pos = ['s', 'm', 'h', 'd']
+
+            time_dict = {"s": 1, "m": 60, "h": 3600, "d": 3600*24}
+
+            unit = time[-1]
+
+            if unit not in pos:
+                return -1
+            try:
+                val = int(time[:-1])
+            except:
+                return -2
+
+            return val * time_dict[unit]
+
+        converted_time = convert(time)
+
+        if converted_time == -1:
+            await ctx.send(embed=discord.Embed(color=discord.Color.red(), description=f"Wrong Time Format!"))
             return
-        if time > 10000:
-            await ctx.send(':x: **ERROR**: Timer can\'t be longer than 10000 seconds.')
+
+        if converted_time == -2:
+            await ctx.send(embed=discord.Embed(color=discord.Color.red(), description=f"The time must be an integer"))
             return
-        await ctx.send(f':white_check_mark: Creating a timer for **{oldtime}{unit}** with message \"**{message}**\"...\nYou will get mentioned/pinged.')
-        await asyncio.sleep(time)
-        await ctx.send(f'{ctx.author.mention} **{message}** (**{oldtime}{unit}** passed.)')
+
+        await ctx.send(embed=discord.Embed(color=discord.Color.blue(), description=f"I Will remind **\"{task}\"** in **{time}**."))
+
+        await asyncio.sleep(converted_time)
+        await ctx.send(f" :alarm_clock: {ctx.author.mention} It's time for you to **\"{task}\"**")
 
     bot.run(token)
 
