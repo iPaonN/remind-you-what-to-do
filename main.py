@@ -44,7 +44,7 @@ def main():
             if unit not in pos:
                 return -1
             try:
-                val - int(time[:-1])
+                val = int(time[:-1])
             except:
                 return -2
             
