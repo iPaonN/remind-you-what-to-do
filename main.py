@@ -13,7 +13,7 @@ bot = commands.Bot(command_prefix="!", intents=discord.Intents.all())
 def main():
     """Bot"""
     # always don't forget to remove token!!!
-    token = '' #สำหรับรันบอท
+    token = 'MTE1MjYwMDc2NjA1ODYxMDc1OA.Ge6kv2.sWzWj-WmjwUDeka1xA6EteGb9SmyS5IsmIMkmw' #สำหรับรันบอท
     # always don't forget to remove token!!!
 
     @bot.event #ดูสถานะ
@@ -35,7 +35,7 @@ def main():
 
     #ลอง Basic Reminds - 66070105
     @bot.command(name='timer', help='Create a timer.', usage='<time> [s|m|h] (<message>)')
-    async def knock(ctx, time, unit, *message):
+    async def timer(ctx, time, unit, *message):
         if not message:
             message = 'Time\'s up!'
         else:
