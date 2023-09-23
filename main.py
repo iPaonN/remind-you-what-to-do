@@ -34,38 +34,30 @@ def main():
         await ctx.send("arai ja!")
 
     #ลอง Basic Reminds - 66070105
-    @bot.command()
-    async def knock(self, ctx, time, task):
-        def convert(time):
-            pos = ['s', 'm', 'h', 'd']
+    @bot.command(name='timer', help='Create a timer.', usage='<time> [s|m|h] (<message>)')
+    async def knock(ctx, time, unit, *message):
+        if not message:
+            message = 'Time\'s up!'
+        else:
+            message = ' '.join(message)
 
-            time_dict = {"s": 1, "m": 60, "h": 3600, "d": 3600*24}
-
-            unit = time[-1]
-
-            if unit not in pos:
-                return -1
-            try:
-                val = int(time[:-1])
-            except:
-                return -2
-
-            return val * time_dict[unit]
-
-        converted_time = convert(time)
-
-        if converted_time == -1:
-            await ctx.send("Wrong Time Format!")
+        time = int(time)
+        oldtime = time # time without unit calculation to seconds
+        if unit == 's':
+            pass
+        elif unit == 'm':
+            time *= 60
+        elif unit == 'h':
+            time *= 3600
+        else:
+            await ctx.send(':x: **ERROR**: Invalid unit.\nUnit can be \'s\' for seconds, \'m\' for minutes or \'h\' for hours.')
             return
-
-        if converted_time == -2:
-            await ctx.send("The time must be an integer")
+        if time > 10000:
+            await ctx.send(':x: **ERROR**: Timer can\'t be longer than 10000 seconds.')
             return
-
-        await ctx.send(f"I Will remind **{task}** in **{time}**.")
-
-        await asyncio.sleep(converted_time)
-        await ctx.send(f"{ctx.author.mention} It's time for you to **{task}** !")
+        await ctx.send(f':white_check_mark: Creating a timer for **{oldtime}{unit}** with message \"**{message}**\"...\nYou will get mentioned/pinged.')
+        await asyncio.sleep(time)
+        await ctx.send(f'{ctx.author.mention} **{message}** (**{oldtime}{unit}** passed.)')
 
     bot.run(token)
 
