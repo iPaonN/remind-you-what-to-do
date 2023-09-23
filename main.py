@@ -34,7 +34,7 @@ def main():
         await ctx.send("arai ja!")
 
     #ลอง Basic Reminds - 66070105
-    @commands.command()
+    @bot.command()
     async def knock(self, ctx, time, task):
         def convert(time):
             pos = ['s', 'm', 'h', 'd']
