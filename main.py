@@ -12,7 +12,9 @@ bot = commands.Bot(command_prefix="!", intents=discord.Intents.all())
 
 def main():
     """Bot"""
-    token = 'MTE1MjYwMDc2NjA1ODYxMDc1OA.G6C4yi.JxiDh2H_CN2dyC23KGILJ7VYZrAwRUo0R0VSZE' #สำหรับรันบอท
+    # always don't forget to remove token!!!
+    token = '' #สำหรับรันบอท
+    # always don't forget to remove token!!!
 
     @bot.event #ดูสถานะ
     async def on_ready():
@@ -47,7 +49,7 @@ def main():
                 val - int(time[:-1])
             except:
                 return -2
-            
+
             return val * time_dict[unit]
 
         converted_time = convert(time)
