@@ -87,8 +87,8 @@ def main():
     async def knock_error(ctx,error):
         if isinstance(error, commands.MissingRequiredArgument):
             await ctx.send(embed=discord.Embed(color=discord.Color.blurple(), description=f"To use this command you have to type \"!knock <time> <task>\" \n \
-                                               Time Format : **s** as second, **m** as minute, **h** as hour, **d** as day \n \
-                                               Command Example : !knock 5s hello world"))
+            Time Format : **s** as second, **m** as minute, **h** as hour, **d** as day \n \
+            Command Example : !knock 5s hello world"))
 
     bot.run(token)
 
