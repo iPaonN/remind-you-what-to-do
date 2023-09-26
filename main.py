@@ -2,7 +2,9 @@
 
 import discord
 import asyncio
+import pytz
 from discord.ext import commands
+from datetime import datetime
 
 #เอาไว้สำหรับรอรับคำสั่ง
 bot = commands.Bot(command_prefix="!", intents=discord.Intents.all())
@@ -74,6 +76,14 @@ def main():
 
         await asyncio.sleep(converted_time)
         await ctx.send(f" :alarm_clock: {ctx.author.mention} It's time for you to **\"{task}\"**")
+
+    #return วิธีใช้คำสั่ง !knock - 66070105
+    @knock.error
+    async def knock_error(ctx,error):
+        if isinstance(error, commands.MissingRequiredArgument):
+            await ctx.send(embed=discord.Embed(color=discord.Color.blurple(), description=f"To use this command you have to type \"!knock <time> <task>\" \n \
+                                               Time Format : **s** as second, **m** as minute, **h** as hour, **d** as day \n \
+                                               Command Example : !knock 5s hello world"))
 
     bot.run(token)
 
