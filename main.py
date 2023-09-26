@@ -4,7 +4,6 @@ import discord
 import asyncio
 import pytz
 from discord.ext import commands
-from datetime import datetime
 
 #เอาไว้สำหรับรอรับคำสั่ง
 bot = commands.Bot(command_prefix="!", intents=discord.Intents.all())
@@ -23,6 +22,11 @@ def main():
         """standby"""
         print("Hi, This is Yu! I'm here")
         print("<---------------------->")
+        try:
+            synced_wip = await bot.tree.sync()
+            print(f"Synced {len(synced_wip)} command(s)")
+        except Exception as syn:
+            print(syn)
 
     #รอคำสั่ง
     @bot.command()
@@ -30,10 +34,11 @@ def main():
         """hi"""
         await ctx.send("Hi, I am here!")
 
-    @bot.command()
-    async def test(ctx):
+    # wip in slash command 112
+    @bot.tree.command()
+    async def test(interaction: discord.Interaction):
         """test"""
-        await ctx.send("arai ja!")
+        await interaction.response.send_message(f"Hi! {interaction.user.mention} get the job done already!", ephemeral=False)
 
     @bot.command()
     async def test2(ctx):
