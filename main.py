@@ -2,15 +2,16 @@
 
 import discord
 import asyncio
-import pytz
+import os
+#import pytz
 from discord.ext import commands
 
 #เอาไว้สำหรับรอรับคำสั่ง
 bot = commands.Bot(command_prefix="!", intents=discord.Intents.all())
-
+# User github 'Granvarden' = 66070291
 # Run the bot
 # always don't forget to remove token
-
+os.chdir("C:/Users/admin/Desktop/remind-you-what-to-do/pic/")#Use your local path
 def main():
     """Bot"""
     # always don't forget to remove token!!!
@@ -44,6 +45,11 @@ def main():
     async def test2(ctx):
         """test2"""
         await ctx.send(embed=discord.Embed(color=discord.Color.red(), description=f"Embed Test"))
+
+    @bot.command()
+    async def sendpic(ctx):
+        'test send pic'
+        await ctx.send('This is picture', file=discord.File('timeup.png'))
 
     #ลอง Basic Reminds - 66070105
     @bot.command()
