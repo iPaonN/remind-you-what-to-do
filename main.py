@@ -2,25 +2,28 @@
 
 import discord
 import asyncio
+import sys
 import os
 #import pytz
 from discord.ext import commands
+from discord import app_commands
 
 #เอาไว้สำหรับรอรับคำสั่ง
 bot = commands.Bot(command_prefix="!", intents=discord.Intents.all())
 # User github 'Granvarden' = 66070291
 # Run the bot
 # always don't forget to remove token
-os.chdir("C:/Users/admin/Desktop/remind-you-what-to-do/pic/")#Use your local path
+
 def main():
     """Bot"""
     # always don't forget to remove token!!!
-    token = '' #สำหรับรันบอท
+    token = 'MTE1MjYwMDc2NjA1ODYxMDc1OA.Glyq2g.Dx6MHT2fXC9YwbZjgeZZVDiTpGeumqsKCErENQ' #สำหรับรันบอท
     # always don't forget to remove token!!!
 
     @bot.event #ดูสถานะ
     async def on_ready():
         """standby"""
+        await bot.change_presence(activity=discord.Game('YOUR MOM')) #ทดสอบ
         print("Hi, This is Yu! I'm here")
         print("<---------------------->")
         try:
@@ -87,6 +90,43 @@ def main():
 
         await asyncio.sleep(converted_time)
         await ctx.send(f" :alarm_clock: {ctx.author.mention} It's time for you to **\"{task}\"**")
+    
+    #ทดลองดัดแปลงให้เป็น slash command
+    @bot.tree.command(name='basicknock',description='What do you want me to remind about?')
+    async def knockbasic(interaction: discord.Interaction,ctx:int, time: str, task: str):
+
+        task = ' '.join(task)
+
+        def convert(time):
+            pos = ['s', 'm', 'h', 'd']
+
+            time_dict = {"s": 1, "m": 60, "h": 3600, "d": 3600*24}
+
+            unit = time[-1]
+
+            if unit not in pos:
+                return -1
+            try:
+                val = int(time[:-1])
+            except:
+                return -2
+
+            return val * time_dict[unit]
+
+        converted_time = convert(time)
+
+        if converted_time == -1:
+            await interaction.response.send_message(embed=discord.Embed(color=discord.Color.red(), description=f"Wrong Time Format!"))
+            return
+
+        if converted_time == -2:
+            await interaction.response.send_message(embed=discord.Embed(color=discord.Color.red(), description=f"The time must be an integer"))
+            return
+
+        await interaction.response.send_message(embed=discord.Embed(color=discord.Color.blue(), description=f"I Will remind **\"{task}\"** in **{time}**."))
+
+        await asyncio.sleep(converted_time)
+        await interaction.followup.send(f" :alarm_clock: {interaction.user.mention} It's time for you to **\"{task}\"**")
 
     #return วิธีใช้คำสั่ง !knock - 66070105
     @knock.error
