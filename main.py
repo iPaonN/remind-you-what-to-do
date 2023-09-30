@@ -17,7 +17,7 @@ bot = commands.Bot(command_prefix="!", intents=discord.Intents.all())
 def main():
     """Bot"""
     # always don't forget to remove token!!!
-    token = 'MTE1MjYwMDc2NjA1ODYxMDc1OA.Glyq2g.Dx6MHT2fXC9YwbZjgeZZVDiTpGeumqsKCErENQ' #สำหรับรันบอท
+    token = '' #สำหรับรันบอท
     # always don't forget to remove token!!!
 
     @bot.event #ดูสถานะ
