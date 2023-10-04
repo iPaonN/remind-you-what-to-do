@@ -4,7 +4,8 @@ import discord
 import asyncio
 import sys
 import os
-#import pytz
+import pytz
+from datetime import datetime
 from discord.ext import commands
 from discord import app_commands
 
@@ -53,6 +54,21 @@ def main():
     async def sendpic(ctx):
         'test send pic'
         await ctx.send('This is picture', file=discord.File('timeup.png'))
+
+    @bot.command()
+    #คำสั่งบอกไทม์โซน
+    async def timezone(ctx, tz_name):
+        try:
+            # Check if the provided timezone is valid
+            tz = pytz.timezone(tz_name)
+        except pytz.UnknownTimeZoneError:
+            await ctx.send(f"Invalid timezone: {tz_name}")
+            return
+
+        # Get the current time in the specified timezone
+        current_time = datetime.now(tz).strftime("**%Y-%m-%d %H:%M:%S**")
+
+        await ctx.send(f"Current time in {tz_name}: {current_time}")
 
     #ลอง Basic Reminds - 66070105
     @bot.command()
