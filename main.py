@@ -56,6 +56,7 @@ def main():
         await ctx.send('This is picture', file=discord.File('timeup.png'))
 
     @bot.command()
+
     #คำสั่งบอกไทม์โซน
     async def timezone(ctx, tz_name):
         try:
