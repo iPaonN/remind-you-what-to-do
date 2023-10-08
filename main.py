@@ -108,11 +108,11 @@ def main():
         await asyncio.sleep(converted_time)
         await ctx.send(f" :alarm_clock: {ctx.author.mention} It's time for you to **\"{task}\"**")
     
-    #ทดลองดัดแปลงให้เป็น slash command
+    #ทดลองดัดแปลงให้เป็น slash command ต้องเพิ่มคำอธิบายการใช้งานลงคำสั่งเพิ่มเติ่ม รับคนช่วย
     @bot.tree.command(name='basicknock',description='What do you want me to remind about?')
-    async def knockbasic(interaction: discord.Interaction,ctx:int, time: str, task: str):
+    async def knockbasic(interaction: discord.Interaction,time: str, task: str):
 
-        task = ' '.join(task)
+        task = ''.join(task)
 
         def convert(time):
             pos = ['s', 'm', 'h', 'd']
@@ -137,7 +137,7 @@ def main():
             return
 
         if converted_time == -2:
-            await interaction.response.send_message(embed=discord.Embed(color=discord.Color.red(), description=f"The time must be an integer"))
+            await interaction.response.send_message(embed=discord.Embed(color=discord.Color.red(), description=f"The time must be an integer and unit of time such as s for second(s)"))
             return
 
         await interaction.response.send_message(embed=discord.Embed(color=discord.Color.blue(), description=f"I Will remind **\"{task}\"** in **{time}**."))
