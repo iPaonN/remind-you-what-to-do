@@ -31,15 +31,18 @@ async def hello(ctx):
     """hi"""
     await ctx.send("Hi, I am here!")
 
+
 @bot.command()
 async def test2(ctx):
     """test2"""
     await ctx.send(embed=discord.Embed(color=discord.Color.red(), description=f"Embed Test"))
 
+
 @bot.command()
 async def sendpic(ctx):
     'test send pic'
     await ctx.send('This is picture', file=discord.File('timeup.png'))
+
 
 @bot.command()
 # คำสั่งบอกไทม์โซน
@@ -55,6 +58,7 @@ async def timezone(ctx, tz_name):
     current_time = datetime.now(tz).strftime("**%Y-%m-%d %H:%M:%S**")
 
     await ctx.send(f"Current time in {tz_name}: {current_time}")
+
 
 # ลอง Basic Reminds - 66070105
 @bot.command()
@@ -93,6 +97,7 @@ async def knock(ctx, time, *task):
     await asyncio.sleep(converted_time)
     await ctx.send(f" :alarm_clock: {ctx.author.mention} It's time for you to **\"{task}\"**")
 
+
 # return วิธีใช้คำสั่ง !knock - 66070105
 @knock.error
 async def knock_error(ctx, error):
@@ -101,14 +106,15 @@ async def knock_error(ctx, error):
         Time Format : **s** as second, **m** as minute, **h** as hour, **d** as day \n \
         Command Example : !knock 5s hello world"))
 
-#slot slash command
-# ทดลองดัดแปลงให้เป็น slash command ต้องเพิ่มคำอธิบายการใช้งานลงคำสั่งเพิ่มเติ่ม รับคนช่วย
 
+# slot slash command
+# ทดลองดัดแปลงให้เป็น slash command ต้องเพิ่มคำอธิบายการใช้งานลงคำสั่งเพิ่มเติ่ม รับคนช่วย
 # wip in slash command 112
 @bot.tree.command()
 async def test(interaction: discord.Interaction):
     """test"""
     await interaction.response.send_message(f"Hi! {interaction.user.mention} get the job done already!", ephemeral=False)
+
 
 @bot.tree.command(name='basicknock', description='What do you want me to remind about?')
 async def knockbasic(interaction: discord.Interaction, time: str, task: str):
@@ -146,12 +152,13 @@ async def knockbasic(interaction: discord.Interaction, time: str, task: str):
     await asyncio.sleep(converted_time)
     await interaction.followup.send(f" :alarm_clock: {interaction.user.mention} It's time for you to **\"{task}\"**")
 
+
 def running():
     """always don't forget to remove token!!!"""
     # always don't forget to remove token!!!
-    token = 'MTE1MjYwMDc2NjA1ODYxMDc1OA.GwYbO5.0vOfWpdtKqNFePozaX7iVJdpoPW1a8An9fbc1Y'  # สำหรับรันบอท
+    token = ''  # สำหรับรันบอท
     # always don't forget to remove token!!!
 
-    bot.run(token) #run bot ja!
+    bot.run(token)  # run bot ja!
 
 running()
