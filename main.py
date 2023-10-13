@@ -7,23 +7,21 @@ import os
 import pytz
 from datetime import datetime
 from discord.ext import commands
-from discord import app_commands
+from wip.convert import convert
 
 # เอาไว้สำหรับรอรับคำสั่ง
 bot = commands.Bot(command_prefix="!", intents=discord.Intents.all())
+knock_knock = bot.create_group('knock', 'What do you want me to remind about?')
 # User github 'Granvarden' = 66070291
 
 @bot.event  # ดูสถานะ
 async def on_ready():
     """standby"""
-    await bot.change_presence(activity=discord.Game('WITH YOU'))  # ทดสอบ
-    print("Hi, This is Yu! I'm here")
-    print("<---------------------->")
-    try:
-        synced_wip = await bot.tree.sync()
-        print(f"Synced {len(synced_wip)} command(s)")
-    except Exception as syn:
-        print(syn)
+    await bot.change_presence(activity=discord.Game('!knock or /knock'))  # ทดสอบ
+    print(f"I have logged in as {bot.user}!")
+    print("--> Currenly working... GREEN!")
+    print("--> Standing by... READY!")
+
 
 # รอคำสั่ง
 @bot.command()
@@ -65,23 +63,6 @@ async def timezone(ctx, tz_name):
 async def knock(ctx, time, *task):
 
     task = ' '.join(task)
-
-    def convert(time):
-        pos = ['s', 'm', 'h', 'd']
-
-        time_dict = {"s": 1, "m": 60, "h": 3600, "d": 3600*24}
-
-        unit = time[-1]
-
-        if unit not in pos:
-            return -1
-        try:
-            val = int(time[:-1])
-        except:
-            return -2
-
-        return val * time_dict[unit]
-
     converted_time = convert(time)
 
     if converted_time == -1:
@@ -107,36 +88,37 @@ async def knock_error(ctx, error):
         Command Example : !knock 5s hello world"))
 
 
-# slot slash command
+# slash commands
 # ทดลองดัดแปลงให้เป็น slash command ต้องเพิ่มคำอธิบายการใช้งานลงคำสั่งเพิ่มเติ่ม รับคนช่วย
 # wip in slash command 112
-@bot.tree.command()
+
+@knock_knock.command()
 async def test(interaction: discord.Interaction):
     """test"""
     await interaction.response.send_message(f"Hi! {interaction.user.mention} get the job done already!", ephemeral=False)
 
 
-@bot.tree.command(name='basicknock', description='What do you want me to remind about?')
-async def knockbasic(interaction: discord.Interaction, time: str, task: str):
+# คำสั่งบอกไทม์โซ
+@knock_knock.command(name="timezone", description='Continent/City')
+async def timezone(interaction: discord.Interaction, continent_city: str):
+    try:
+        # Check if the provided timezone is valid
+        tz = pytz.timezone(continent_city)
+    except pytz.UnknownTimeZoneError:
+        await interaction.response.send_message(f"Invalid timezone: {continent_city}", ephemeral=True)
+        return
+
+    # Get the current time in the specified timezone
+    current_time = datetime.now(tz).strftime("**%Y-%m-%d %H:%M:%S**")
+
+    await interaction.response.send_message(f"Current time in {continent_city}: {current_time}", ephemeral=True)
+
+
+@knock_knock.command(name='me', description='I will remind you!')
+async def basicremind(interaction: discord.Interaction,time: str, task: str):
+    """Basic Reminder"""
 
     task = ''.join(task)
-
-    def convert(time):
-        pos = ['s', 'm', 'h', 'd']
-
-        time_dict = {"s": 1, "m": 60, "h": 3600, "d": 3600*24}
-
-        unit = time[-1]
-
-        if unit not in pos:
-            return -1
-        try:
-            val = int(time[:-1])
-        except:
-            return -2
-
-        return val * time_dict[unit]
-
     converted_time = convert(time)
 
     if converted_time == -1:
