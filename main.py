@@ -11,7 +11,8 @@ from wip.convert import convert
 
 # เอาไว้สำหรับรอรับคำสั่ง
 bot = commands.Bot(command_prefix="!", intents=discord.Intents.all())
-knock_knock = bot.create_group('knock', 'What do you want me to remind about?')
+client = discord.Client()
+slash = bot.create_group('knock', 'What do you want me to remind about?')
 # User github 'Granvarden' = 66070291
 
 @bot.event  # ดูสถานะ
@@ -21,7 +22,6 @@ async def on_ready():
     print(f"I have logged in as {bot.user}!")
     print("--> Currenly working... GREEN!")
     print("--> Standing by... READY!")
-
 
 # รอคำสั่ง
 @bot.command()
@@ -92,14 +92,14 @@ async def knock_error(ctx, error):
 # ทดลองดัดแปลงให้เป็น slash command ต้องเพิ่มคำอธิบายการใช้งานลงคำสั่งเพิ่มเติ่ม รับคนช่วย
 # wip in slash command 112
 
-@knock_knock.command()
+@slash.command()
 async def test(interaction: discord.Interaction):
     """test"""
     await interaction.response.send_message(f"Hi! {interaction.user.mention} get the job done already!", ephemeral=False)
 
 
 # คำสั่งบอกไทม์โซ
-@knock_knock.command(name="timezone", description='Continent/City')
+@slash.command(name="timezone", description='Continent/City')
 async def timezone(interaction: discord.Interaction, continent_city: str):
     try:
         # Check if the provided timezone is valid
@@ -114,7 +114,7 @@ async def timezone(interaction: discord.Interaction, continent_city: str):
     await interaction.response.send_message(f"Current time in {continent_city}: {current_time}", ephemeral=True)
 
 
-@knock_knock.command(name='me', description='I will remind you!')
+@slash.command(name='me', description='I will remind you!')
 async def basicremind(interaction: discord.Interaction,time: str, task: str):
     """Basic Reminder"""
 
