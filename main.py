@@ -5,13 +5,14 @@ import asyncio
 import sys
 import os
 import pytz
+import re
 from datetime import datetime
 from discord.ext import commands
 from wip.convert import convert
 
 # เอาไว้สำหรับรอรับคำสั่ง
 bot = commands.Bot(command_prefix="!", intents=discord.Intents.all())
-client = discord.Client()
+client = discord.Client(intents=discord.Intents.all())
 slash = bot.create_group('knock', 'What do you want me to remind about?')
 # User github 'Granvarden' = 66070291
 
@@ -87,7 +88,6 @@ async def knock_error(ctx, error):
         Time Format : **s** as second, **m** as minute, **h** as hour, **d** as day \n \
         Command Example : !knock 5s hello world"))
 
-
 # slash commands
 # ทดลองดัดแปลงให้เป็น slash command ต้องเพิ่มคำอธิบายการใช้งานลงคำสั่งเพิ่มเติ่ม รับคนช่วย
 # wip in slash command 112
@@ -138,7 +138,7 @@ async def basicremind(interaction: discord.Interaction,time: str, task: str):
 def running():
     """always don't forget to remove token!!!"""
     # always don't forget to remove token!!!
-    token = ''  # สำหรับรันบอท
+    token = "" # สำหรับรันบอท
     # always don't forget to remove token!!!
 
     bot.run(token)  # run bot ja!
