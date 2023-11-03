@@ -1,7 +1,9 @@
-import re
 """CALING TIME"""
 
+import re
+
 def convert(time_str: str) -> int:
+    """Used to calculating time for input"""
     time_dict = {'s': 1, 'm': 60, 'h':3600, 'd':3600*24}
     # this pattern looks for days, hours, minutes, seconds in the string, etc
     regex_pattern = r"^(?P<day>\d+d)?(?P<hour>\d+h)?(?P<minute>\d+m)?(?P<second>\d+s)?"
