@@ -8,6 +8,7 @@ import pytz
 from datetime import datetime
 from discord.ext import commands
 from wip.convert import convert
+histor = []
 
 # เอาไว้สำหรับรอรับคำสั่ง
 bot = commands.Bot(command_prefix="!", intents=discord.Intents.all())
@@ -75,6 +76,7 @@ async def knock(ctx, time, *task):
         await ctx.send(embed=discord.Embed(color=discord.Color.red(), description=f"The time must be an integer"))
         return
 
+    histor.append(task)
     await ctx.send(embed=discord.Embed(color=discord.Color.blue(), description=f"I Will remind **\"{task}\"** in **{time}**."))
 
     await asyncio.sleep(converted_time)
@@ -146,7 +148,16 @@ async def sl_remind(interaction: discord.Interaction,time: str, task: str): #use
 
     await asyncio.sleep(converted_time)
     await interaction.followup.send(f":alarm_clock: {interaction.user.mention} It's time for you to **\"{task}\"**")
-
+    
+@bot.command()
+async def history(ctx):
+    '''hist'''
+    if len(histor) < 10:
+        for i in range(1, len(histor)+1):
+            await ctx.send(f'{histor[-i]}')
+    else:
+        for i in range(1, 11):
+            await ctx.send(f'{histor[-i]}')
 
 def running():
     """always don't forget to remove token!!!"""
