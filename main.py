@@ -7,6 +7,21 @@ from discord.ext import commands
 from discord import app_commands
 =======
 from wip.convert import convert
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
+
+def running():
+    """always don't forget to remove token!!!"""
+    # always don't forget to remove token!!!
+    token = "" # สำหรับรันบอท
+    # always don't forget to remove token!!!
+
+    bot.run(token)  # run bot ja!
+
+running()
+
+# below, all func
 >>>>>>> Stashed changes
 
 #เอาไว้สำหรับรอรับคำสั่ง
@@ -143,6 +158,7 @@ async def sl_remind(interaction: discord.Interaction,time: str, task: str): #use
 
     await asyncio.sleep(converted_time)
     await interaction.followup.send(f":alarm_clock: {interaction.user.mention} It's time for you to **\"{task}\"**")
+<<<<<<< Updated upstream
 
 def running():
     """always don't forget to remove token!!!"""
@@ -219,3 +235,6 @@ def running():
     bot.run(token)
 
 main()
+=======
+    
+>>>>>>> Stashed changes
