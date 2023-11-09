@@ -2,19 +2,19 @@
 
 import discord
 import asyncio
-import sys
-import os
 import pytz
 from datetime import datetime
 from discord.ext import commands
 from wip.convert import convert
-histor = []
+from wip.settings import token
 # User github 'Granvarden' = 66070291
+
+histor = []
+
 
 def running():
     """always don't forget to remove token!!!"""
     # always don't forget to remove token!!!
-    token = "MTE1MjYwMDc2NjA1ODYxMDc1OA.GweF5Z.LOmSxwTYMbKio6ylCW4A7ABchW6sM9xE889tQE" # สำหรับรันบอท
     # always don't forget to remove token!!!
 
     bot.run(token)  # run bot ja!
@@ -118,15 +118,23 @@ async def sl_remind(interaction: discord.Interaction,time: str, task: str): #use
 
     await asyncio.sleep(converted_time)
     await interaction.followup.send(f":alarm_clock: {interaction.user.mention} It's time for you to **\"{task}\"**")
-    
-@bot.command()
-async def history(ctx):
-    '''hist'''
-    if len(histor) < 10:
-        for i in range(1, len(histor)+1):
-            await ctx.send(f'{histor[-i]}')
-    else:
-        for i in range(1, 11):
-            await ctx.send(f'{histor[-i]}')
+
+# @slash.command(name='remind_list', description='Task List')
+# async def sl_history(interaction: discord.Interaction, ctx):
+#     '''hist'''
+
+#     if histor == []:
+#         await interaction.response.send_message('No Tasks')
+
+#     if len(histor) < 10:
+#         await 
+#         for i in range(1, len(histor)+1):
+#             await interaction.response(f'{histor[-i]}')
+#     else:
+#         for i in range(1, 11):
+#             await interaction.response(f'{histor[-i]}')
+
+#     if len(histor) > 10:
+#         histor.pop(0)
 
 running()
