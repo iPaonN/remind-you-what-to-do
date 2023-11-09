@@ -9,12 +9,21 @@ from datetime import datetime
 from discord.ext import commands
 from wip.convert import convert
 histor = []
+# User github 'Granvarden' = 66070291
+
+def running():
+    """always don't forget to remove token!!!"""
+    # always don't forget to remove token!!!
+    token = "MTE1MjYwMDc2NjA1ODYxMDc1OA.GweF5Z.LOmSxwTYMbKio6ylCW4A7ABchW6sM9xE889tQE" # สำหรับรันบอท
+    # always don't forget to remove token!!!
+
+    bot.run(token)  # run bot ja!
 
 # เอาไว้สำหรับรอรับคำสั่ง
 bot = commands.Bot(command_prefix="!", intents=discord.Intents.all())
 client = discord.Client(intents=discord.Intents.all())
 slash = bot.create_group('knock', 'What do you want me to remind about?')
-# User github 'Granvarden' = 66070291
+
 
 @bot.event  # ดูสถานะ
 async def on_ready():
@@ -29,36 +38,6 @@ async def on_ready():
 async def hello(ctx):
     """hi"""
     await ctx.send("Hi, I am here!")
-
-
-@bot.command()
-async def test2(ctx):
-    """test2"""
-    await ctx.send(embed=discord.Embed(color=discord.Color.red(), description=f"Embed Test"))
-
-
-@bot.command()
-async def sendpic(ctx):
-    'test send pic'
-    await ctx.send('This is picture', file=discord.File('timeup.png'))
-
-
-@bot.command()
-# คำสั่งบอกไทม์โซน
-async def timezone(ctx, tz_name):
-    """timezone as old fashion command"""
-    try:
-        # Check if the provided timezone is valid
-        tz = pytz.timezone(tz_name)
-    except pytz.UnknownTimeZoneError:
-        await ctx.send(embed=discord.Embed(color=discord.Color.red(), description=f"Invalid timezone: {tz_name}\n" #add somecolor -112
-        "Please specify me, such as Europe/Vienna"))
-        return
-
-    # Get the current time in the specified timezone
-    current_time = datetime.now(tz).strftime("**%Y-%m-%d %H:%M:%S**")
-
-    await ctx.send(embed=discord.Embed(color=discord.Color.blue(), description=f"Current time in {tz_name}: {current_time}"))
 
 # ลอง Basic Reminds - 66070105
 @bot.command()
@@ -91,16 +70,6 @@ async def knock_error(ctx, error):
         Time Format : **s** as second, **m** as minute, **h** as hour, **d** as day \n \
         Command Example : !knock 5s hello world"))
 
-# return error timezone - 112
-@timezone.error
-async def timezone_error(ctx, error):
-    """In case of timezone error"""
-    if isinstance(error, commands.MissingRequiredArgument):
-        await ctx.send(embed=discord.Embed(color=discord.Color.red(), description=f"Please specify me. Type like this \"!timezone <Continent>/<City>\" \n \
-        Here! Format : Continent such as Asia, City could be ... Bangkok \n \
-        Command Example : !timezone Asia/Bangkok\n"
-        "Yo! TRY SLASH COMMAND!"))
-
 # slash commands
 # ทดลองดัดแปลงให้เป็น slash command ต้องเพิ่มคำอธิบายการใช้งานลงคำสั่งเพิ่มเติ่ม รับคนช่วย
 # wip in slash command 112
@@ -115,6 +84,7 @@ async def test(interaction: discord.Interaction):
 @slash.command(name="timezone", description='Continent/City')
 async def sl_timezone(interaction: discord.Interaction, continent_city: str):
     """Slash Command of Timezone"""
+    continent_city.replace(' ', '_')
     try:
         # Check if the provided timezone is valid
         tz = pytz.timezone(continent_city)
@@ -158,13 +128,5 @@ async def history(ctx):
     else:
         for i in range(1, 11):
             await ctx.send(f'{histor[-i]}')
-
-def running():
-    """always don't forget to remove token!!!"""
-    # always don't forget to remove token!!!
-    token = "" # สำหรับรันบอท
-    # always don't forget to remove token!!!
-
-    bot.run(token)  # run bot ja!
 
 running()
