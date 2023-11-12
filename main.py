@@ -2,6 +2,7 @@
 
 import asyncio
 from datetime import datetime
+from discord.enums import WebhookType
 import pytz
 
 import discord
@@ -22,8 +23,9 @@ def running():
 
 
 # เอาไว้สำหรับรอรับคำสั่ง
-bot = commands.Bot(command_prefix="!", intents=discord.Intents.all())
+# bot = commands.Bot(command_prefix="!", intents=discord.Intents.all())
 client = discord.Client(intents=discord.Intents.all())
+bot = discord.Bot()
 slash = bot.create_group('knock', 'What do you want me to remind about?')
 
 
@@ -64,45 +66,45 @@ async def on_ready():
 
 # ลอง Basic Reminds - 66070105
 # Basic Reminds
-@bot.command()
-async def knock(ctx, time, *task):
-    """Basic Reminds"""
+# @bot.command()
+# async def knock(ctx, time, *task):
+#     """Basic Reminds"""
 
-    task = ' '.join(task)
-    converted_time = convert(time)
+#     task = ' '.join(task)
+#     converted_time = convert(time)
 
-    if converted_time == -1:
-        await ctx.send(embed=discord.Embed(color=discord.Color.red(),
-                                           description="Wrong Time Format!"))
-        return
+#     if converted_time == -1:
+#         await ctx.send(embed=discord.Embed(color=discord.Color.red(),
+#                                            description="Wrong Time Format!"))
+#         return
 
-    if converted_time == -2:
-        await ctx.send(embed=discord.Embed(
-            color=discord.Color.red(),
-            description="The time must be an integer"))
-        return
+#     if converted_time == -2:
+#         await ctx.send(embed=discord.Embed(
+#             color=discord.Color.red(),
+#             description="The time must be an integer"))
+#         return
 
-    my_queue.enqueue(task)
+#     my_queue.enqueue(task)
 
-    await ctx.send(embed=discord.Embed(
-        color=discord.Color.blue(),
-        description=f"I will remind **\"{task}\"** in **{time}**."))
+#     await ctx.send(embed=discord.Embed(
+#         color=discord.Color.blue(),
+#         description=f"I will remind **\"{task}\"** in **{time}**."))
 
-    await asyncio.sleep(converted_time)
-    await ctx.send(
-        f":alarm_clock: {ctx.author.mention} It's time for you to **\"{task}\"**"
-    )
+#     await asyncio.sleep(converted_time)
+#     await ctx.send(
+#         f":alarm_clock: {ctx.author.mention} It's time for you to **\"{task}\"**"
+#     )
 
 
 # return วิธีใช้คำสั่ง !knock - 66070105
-@knock.error
-async def knock_error(ctx, error):
-    if isinstance(error, commands.MissingRequiredArgument):
-        await ctx.send(embed=discord.Embed(
-            color=discord.Color.red(),
-            description="To use this command you have to type \"!knock <time> <task>\" \n \
-        Time Format : **s** as second, **m** as minute, **h** as hour, **d** as day \n \
-        Command Example : !knock 5s hello world or try slash commands!"))
+# @knock.error
+# async def knock_error(ctx, error):
+#     if isinstance(error, commands.MissingRequiredArgument):
+#         await ctx.send(embed=discord.Embed(
+#             color=discord.Color.red(),
+#             description="To use this command you have to type \"!knock <time> <task>\" \n \
+#         Time Format : **s** as second, **m** as minute, **h** as hour, **d** as day \n \
+#         Command Example : !knock 5s hello world or try slash commands!"))
 
 
 # slash commands
@@ -110,15 +112,54 @@ async def knock_error(ctx, error):
 # wip in slash command 112
 
 
-@slash.command(name='hello', description='Hi to me')
+@bot.slash_command(name='help', description="I'd like to introduce myself! To show what I can do!")
 async def test(interaction: discord.Interaction):
     """Testing"""
-    await interaction.response.send_message(
-        f"Hi! {interaction.user.mention} get the job done already!")
+    embed = discord.Embed(title='Help Menu',
+                          description='Here what you need to know,\n'
+                                      'Time Format\n'
+                                      '**s** - second\n'
+                                      '**m** - minute\n'
+                                      '**h** - hour\n'
+                                      '**d** - day\n'
+                                      'Even you gonna give me negative time, I will put it in abs!',
+                          timestamp=datetime.now(),
+                          color=discord.Color.blue())
+  
+    embed.add_field(name="/knock me 5m Hello World or /knock me 5s5m Hello JA!",
+    value="I will remind you with this command!",
+    inline=False)
+  
+    embed.add_field(name="/knock who 1h main @<someone>",
+    value="I will remind someone that you mention with this command!",
+    inline=False)
+  
+    embed.add_field(name="/knock everyone 15m 3 Hello Nemo",
+    value="I will remind everyone,there's something important! \n"
+          "In during 15m I will remind you 3 times before time's up na.",
+    inline=False)
+  
+    embed.add_field(name="/knock remind_list",
+    value="List of your set tasks!",
+    inline=False)
+  
+    embed.add_field(name="/knock clear_list",
+    value="Yes! You can clear all the set tasks list",
+    inline=False)
+
+    embed.add_field(name="/timezone <continent>/<city>, such as Asia/Bangkok",
+    value="You know what, I can tell you the other timezone!",
+    inline=False)
+  
+    embed.add_field(name="/subject_score",
+    value="Score? Here! Links to your scores.",
+    inline=False)
+  
+    await interaction.response.send_message(embed=embed)
 
 
 # คำสั่งบอกไทม์โซน
-@slash.command(name="timezone", description='Continent/City')
+@bot.slash_command(name="timezone", description='Continent/City')
 async def sl_timezone(interaction: discord.Interaction, continent_city: str):
     """Slash Command of Timezone"""
 
@@ -176,8 +217,8 @@ async def sl_remind(interaction: discord.Interaction, time: str, task: str):
 
 
 # code belong to mickey
-@slash.command(name='to_who', description='I will remind to someone that you mentioned!')
-async def sl_remindwho(interaction: discord.Interaction, time: str, task: str, name: str):
+@slash.command(name='who', description='I will remind to someone that you mention!')
+async def sl_remindwho(interaction: discord.Interaction, time: str, task: str, who: str):
     """Slash Command of Basic Reminder"""
 
     task = ''.join(task)
@@ -192,19 +233,19 @@ async def sl_remindwho(interaction: discord.Interaction, time: str, task: str, n
     if converted_time == -2:
         await interaction.response.send_message(embed=discord.Embed(
                                                 color=discord.Color.red(),
-                                                description="The time must be an integer and unit of time such as s for second(s)"))
+                                                description="The time must be integer and unit of time such as s for second(s)"))
         return
 
     my_queue.enqueue(task)
 
     await interaction.response.send_message(embed=discord.Embed(
                                             color=discord.Color.blue(),
-                                            description=f"I Will remind **\"{task}\"** in **{time}**."))
+                                            description=f"I Will remind {who} **\"{task}\"** in **{time}**."))
 
     await asyncio.sleep(converted_time)
     await interaction.followup.send(embed=discord.Embed(
                                     color=discord.Color.green(),
-                                    description=f":alarm_clock: {name} It's time for you to **\"{task}\"**"))
+                                    description=f":alarm_clock: {who} It's time for you to **\"{task}\"**"))
 # code belong to mickey
 
 
@@ -222,7 +263,7 @@ async def queue(interaction: discord.Interaction):
     await interaction.response.send_message(embed=embed)
 
 
-@slash.command(name='clear_tasks', description='Clear all set tasks')
+@slash.command(name='clear_list', description='Clear all set tasks')
 async def re_queue(interaction: discord.Interaction):
     '''clear the histor'''
 
@@ -238,7 +279,7 @@ async def re_queue(interaction: discord.Interaction):
     await interaction.response.send_message(embed=embed)
 
 
-@slash.command(name='remind_everyone', descripton='Important Message and To Everyone')
+@slash.command(name='everyone', descripton='Important Message and To Everyone')
 async def important(interaction: discord.Interaction, time: str, repeats: int, *, task: str):
     """Command to set a reminder with repeats"""
 
@@ -282,5 +323,31 @@ async def important(interaction: discord.Interaction, time: str, repeats: int, *
                                     color=discord.Color.green(),
                                     description=f"Time's up! @everyone it's time for {task}"))
 
+
+@bot.slash_command(name='subject_score', description="Score? PSCP? ITF? ICS?")
+async def first_yearscore(interaction: discord.Interaction):
+    '''link to all subject's score page'''
+
+    embed = discord.Embed(title='I had all of them already!',
+                          timestamp=datetime.now(),
+                          color=discord.Color.nitro_pink())
+
+    embed.add_field(name="PSCP's score",
+                    value="https://shorturl.at/cdGUX",
+                    inline=False)
+
+    embed.add_field(name="ITF's score",
+                    value="https://bd3s.short.gy/ITF-66-Lab-Score",
+                    inline=False)
+
+    embed.add_field(name="ICS's score",
+    value="https://supakit.net/learning/?file=ics/score",
+    inline=False)
+
+    embed.add_field(name="M4IT's score?",
+    value="Unavailable",
+    inline=False)
+
+    await interaction.response.send_message(embed=embed)
 
 running()
